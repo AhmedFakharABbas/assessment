@@ -134,3 +134,17 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Angular
+/client/node_modules/
+/client/dist/
+.client/
+
+# Go
+/server/bin/
+server/tmp/
+server/vendor/
+server/*.exe
+server/*.out
+server/*.test
+server/coverage/
