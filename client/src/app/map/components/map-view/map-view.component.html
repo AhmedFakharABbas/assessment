@@ -1,0 +1,30 @@
+<div class="p-4 max-w-4xl mx-auto">
+  <input
+    type="text"
+    placeholder="Enter city name..."
+    class="p-2 border rounded w-full"
+    #cityInput
+    [(ngModel)]="searchQuery"
+    (keyup)="searchCity()"
+  />
+  @if (errorMessage.length > 0 && searchQuery.trim().length > 0 && !location) {
+  <div
+    class="bg-red-100 text-red-700 p-2 rounded mt-2 flex justify-between items-center"
+  >
+    {{ errorMessage }}
+    <button
+      (click)="retry()"
+      class="ml-2 bg-red-500 text-white px-2 py-1 rounded"
+    >
+      Retry
+    </button>
+  </div>
+  }
+
+  <div
+    *ngIf="!location && searchQuery.trim().length > 0"
+    class="h-96 w-full mt-4 bg-gray-200 animate-pulse"
+  ></div>
+
+  <div id="map" class="h-96 w-full mt-4" ></div>
+</div>

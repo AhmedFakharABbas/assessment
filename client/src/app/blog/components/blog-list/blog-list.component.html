@@ -1,0 +1,19 @@
+<div class="p-4 max-w-4xl mx-auto">
+  <button
+    class="bg-blue-500 text-white px-4 py-2 rounded mb-4"
+    (click)="refresh()"
+  >
+    Refresh
+  </button>
+
+  <app-blog-filter (search)="filterPosts($event)"></app-blog-filter>
+<div class="p-4 max-w-4xl mx-auto">
+
+  <ng-container *ngIf="posts$ | async as posts; else loading">
+    <app-blog-item *ngFor="let post of posts" [post]="post"></app-blog-item>
+  </ng-container>
+
+  <ng-template #loading>
+    <p class="text-gray-500">Loading posts...</p>
+  </ng-template>
+</div>

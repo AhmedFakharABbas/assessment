@@ -1,0 +1,17 @@
+<nav class="bg-gray-900 text-white p-4 flex justify-between items-center">
+  <div>
+    <a (click)="navigateTo('/blog')" class="mr-4 cursor-pointer">Blog</a>
+    <a (click)="navigateTo('/map')" class="cursor-pointer">Map</a>
+    <a (click)="navigateTo('/board')" class="cursor-pointer ml-4">Board</a>
+  </div>
+  <button (click)="toggleTheme()" class="bg-gray-700 px-3 py-2 rounded">
+    {{ isDarkMode ? "🌙 Dark" : "☀️ Light" }}
+  </button>
+</nav>
+
+@if (errorMessage) {
+<div class="p-2 text-center">
+  {{ errorMessage }}
+</div>
+}
+<router-outlet />
