@@ -4,21 +4,21 @@ import {
   effect,
   OnDestroy,
   OnInit,
-} from '@angular/core';
-import { Subscription, BehaviorSubject, Subject, timer } from 'rxjs';
-import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
-import { MapService } from '../../services/map.service';
-import mapboxgl from 'mapbox-gl';
-import { LocationModel } from '../../models/location';
-import { FormsModule } from '@angular/forms';
-import { ThemeService } from '../../../services/theme.service';
-import { CommonModule } from '@angular/common';
+} from "@angular/core";
+import { Subscription, BehaviorSubject, Subject, timer } from "rxjs";
+import { debounceTime, switchMap, takeUntil } from "rxjs/operators";
+import { MapService } from "../../services/map.service";
+import mapboxgl from "mapbox-gl";
+import { LocationModel } from "../../models/location";
+import { FormsModule } from "@angular/forms";
+import { ThemeService } from "../../../services/theme.service";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'app-map-view',
+  selector: "app-map-view",
   imports: [FormsModule, CommonModule],
-  templateUrl: './map-view.component.html',
-  styleUrl: './map-view.component.css',
+  templateUrl: "./map-view.component.html",
+  styleUrl: "./map-view.component.css",
 })
 export class MapViewComponent implements OnDestroy, OnInit {
   private map!: mapboxgl.Map;
@@ -27,18 +27,17 @@ export class MapViewComponent implements OnDestroy, OnInit {
   private themeSub!: Subscription;
   private cancelRequests$ = new Subject<void>();
 
-  errorMessage: string = '';
-  searchQuery: string = '';
+  errorMessage: string = "";
+  searchQuery: string = "";
   location: LocationModel | null = null;
   timeout: number = 2000;
   restaurants: any[] = [];
   get isDarkMode() {
     return this.themeService.darkModeSignal();
   }
-  private searchTrigger = new BehaviorSubject<string>('');
+  private searchTrigger = new BehaviorSubject<string>("");
 
-  mapboxToken =
-    'pk.eyJ1IjoiYWxpLWFrYmVyLTc5IiwiYSI6ImNsYXRqMTB0bzAwY3Izdm55Zmptc2N6ZjkifQ.T28yDHgDc28SCV96kH5NUg';
+  mapboxToken = "";
 
   constructor(
     private mapService: MapService,
@@ -71,13 +70,13 @@ export class MapViewComponent implements OnDestroy, OnInit {
             this.loadRestaurants();
           } else {
             setTimeout(() => {
-              this.errorMessage = 'No location found. Please try again.';
+              this.errorMessage = "No location found. Please try again.";
             }, this.timeout);
           }
         },
         error: () => {
           setTimeout(() => {
-            this.errorMessage = 'Failed to fetch location data. Please retry.';
+            this.errorMessage = "Failed to fetch location data. Please retry.";
           }, this.timeout);
         },
       });
@@ -88,12 +87,12 @@ export class MapViewComponent implements OnDestroy, OnInit {
       this.map.remove();
     }
     this.map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v11',
+      container: "map",
+      style: "mapbox://styles/mapbox/streets-v11",
       center: [this.location!.lon, this.location!.lat],
       zoom: 13,
     });
-    this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    this.map.addControl(new mapboxgl.NavigationControl(), "top-right");
     new mapboxgl.Marker()
       .setLngLat([this.location!.lon, this.location!.lat])
       .setPopup(new mapboxgl.Popup().setText(this.location!.name))
@@ -102,7 +101,7 @@ export class MapViewComponent implements OnDestroy, OnInit {
   }
   setupMapEvents(): void {
     if (this.map) {
-      this.map.on('moveend', () => {
+      this.map.on("moveend", () => {
         const center = this.map.getCenter();
         this.loadRestaurants(center.lat, center.lng);
       });
@@ -124,34 +123,34 @@ export class MapViewComponent implements OnDestroy, OnInit {
         },
         error: () => {
           setTimeout(() => {
-            this.errorMessage = 'Failed to fetch restaurants. Please retry.';
+            this.errorMessage = "Failed to fetch restaurants. Please retry.";
           }, this.timeout);
         },
       });
   }
 
   displayRestaurants(): void {
-    if (this.map.getSource('restaurants')) {
-      this.map.removeLayer('clusters');
-      this.map.removeLayer('cluster-count');
-      this.map.removeLayer('unclustered-point');
-      this.map.removeLayer('restaurant-labels');
-      this.map.removeSource('restaurants');
+    if (this.map.getSource("restaurants")) {
+      this.map.removeLayer("clusters");
+      this.map.removeLayer("cluster-count");
+      this.map.removeLayer("unclustered-point");
+      this.map.removeLayer("restaurant-labels");
+      this.map.removeSource("restaurants");
     }
 
-    this.map.addSource('restaurants', {
-      type: 'geojson',
+    this.map.addSource("restaurants", {
+      type: "geojson",
       data: {
-        type: 'FeatureCollection',
+        type: "FeatureCollection",
         features: this.restaurants.map((restaurant) => ({
-          type: 'Feature',
+          type: "Feature",
           properties: {
             name: restaurant.tags.name,
             description:
-              restaurant.tags.description || 'No description available',
+              restaurant.tags.description || "No description available",
           },
           geometry: {
-            type: 'Point',
+            type: "Point",
             coordinates: [restaurant.lon, restaurant.lat],
           },
         })),
@@ -163,76 +162,76 @@ export class MapViewComponent implements OnDestroy, OnInit {
 
     // Clusters (when zoomed out)
     this.map.addLayer({
-      id: 'clusters',
-      type: 'circle',
-      source: 'restaurants',
-      filter: ['has', 'point_count'],
+      id: "clusters",
+      type: "circle",
+      source: "restaurants",
+      filter: ["has", "point_count"],
       paint: {
-        'circle-color': '#ff0000',
-        'circle-radius': ['step', ['get', 'point_count'], 15, 10, 20, 50, 25], // Adjust size based on density
+        "circle-color": "#ff0000",
+        "circle-radius": ["step", ["get", "point_count"], 15, 10, 20, 50, 25], // Adjust size based on density
       },
     });
 
     // Cluster count text
     this.map.addLayer({
-      id: 'cluster-count',
-      type: 'symbol',
-      source: 'restaurants',
-      filter: ['has', 'point_count'],
+      id: "cluster-count",
+      type: "symbol",
+      source: "restaurants",
+      filter: ["has", "point_count"],
       layout: {
-        'text-field': '{point_count_abbreviated}',
-        'text-size': 12,
+        "text-field": "{point_count_abbreviated}",
+        "text-size": 12,
       },
     });
 
     // Individual restaurant points (when zoomed in)
     this.map.addLayer({
-      id: 'unclustered-point',
-      type: 'circle',
-      source: 'restaurants',
-      filter: ['!', ['has', 'point_count']],
+      id: "unclustered-point",
+      type: "circle",
+      source: "restaurants",
+      filter: ["!", ["has", "point_count"]],
       paint: {
-        'circle-color': '#008000',
-        'circle-radius': 8,
-        'circle-stroke-width': 1,
-        'circle-stroke-color': '#fff',
+        "circle-color": "#008000",
+        "circle-radius": 8,
+        "circle-stroke-width": 1,
+        "circle-stroke-color": "#fff",
       },
     });
 
     // Labels for individual restaurants
     this.map.addLayer({
-      id: 'restaurant-labels',
-      type: 'symbol',
-      source: 'restaurants',
-      filter: ['!', ['has', 'point_count']],
+      id: "restaurant-labels",
+      type: "symbol",
+      source: "restaurants",
+      filter: ["!", ["has", "point_count"]],
       layout: {
-        'text-field': ['get', 'name'],
-        'text-offset': [0, 1.2], // Position text above marker
-        'text-anchor': 'top',
-        'text-size': 12,
+        "text-field": ["get", "name"],
+        "text-offset": [0, 1.2], // Position text above marker
+        "text-anchor": "top",
+        "text-size": 12,
       },
       paint: {
-        'text-color': '#000',
-        'text-halo-color': '#fff',
-        'text-halo-width': 2,
+        "text-color": "#000",
+        "text-halo-color": "#fff",
+        "text-halo-width": 2,
       },
     });
 
     // Handle clicks to zoom in on clusters
-    this.map.on('click', 'clusters', (e) => {
+    this.map.on("click", "clusters", (e) => {
       const features = this.map.queryRenderedFeatures(e.point, {
-        layers: ['clusters'],
+        layers: ["clusters"],
       });
       if (!features.length) return;
 
-      const clusterId = features[0]?.properties?.['cluster_id'];
+      const clusterId = features[0]?.properties?.["cluster_id"];
       if (!clusterId) return;
 
-      (this.map.getSource('restaurants') as any).getClusterExpansionZoom(
+      (this.map.getSource("restaurants") as any).getClusterExpansionZoom(
         clusterId,
         (err: unknown, zoom: number) => {
           if (err) {
-            console.error('Error expanding cluster:', err);
+            console.error("Error expanding cluster:", err);
             return;
           }
 
@@ -250,8 +249,8 @@ export class MapViewComponent implements OnDestroy, OnInit {
       closeOnClick: false,
     });
 
-    this.map.on('mouseenter', 'unclustered-point', (e) => {
-      this.map.getCanvas().style.cursor = 'pointer';
+    this.map.on("mouseenter", "unclustered-point", (e) => {
+      this.map.getCanvas().style.cursor = "pointer";
 
       if (!e.features || e.features.length === 0) return;
       const feature = e.features[0];
@@ -265,26 +264,26 @@ export class MapViewComponent implements OnDestroy, OnInit {
       popup
         .setLngLat(coordinates)
         .setHTML(
-          `<strong>${name || 'Unknown'}</strong><br>${
-            description || 'No description available'
+          `<strong>${name || "Unknown"}</strong><br>${
+            description || "No description available"
           }`
         )
         .addTo(this.map);
     });
 
-    this.map.on('mouseleave', 'unclustered-point', () => {
-      this.map.getCanvas().style.cursor = '';
+    this.map.on("mouseleave", "unclustered-point", () => {
+      this.map.getCanvas().style.cursor = "";
       popup.remove();
     });
   }
 
   searchCity(): void {
-    console.log('searc trigers ');
+    console.log("searc trigers ");
     if (this.searchQuery.trim().length === 0) {
-      this.errorMessage = '';
+      this.errorMessage = "";
       return;
     }
-    this.errorMessage = '';
+    this.errorMessage = "";
     this.searchTrigger.next(this.searchQuery);
   }
 
@@ -292,8 +291,8 @@ export class MapViewComponent implements OnDestroy, OnInit {
     if (this.map) {
       this.map.setStyle(
         isDarkMode
-          ? 'mapbox://styles/mapbox/dark-v11'
-          : 'mapbox://styles/mapbox/streets-v11'
+          ? "mapbox://styles/mapbox/dark-v11"
+          : "mapbox://styles/mapbox/streets-v11"
       );
     }
   }

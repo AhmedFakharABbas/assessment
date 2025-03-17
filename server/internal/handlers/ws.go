@@ -9,7 +9,9 @@ import (
 
 // Upgrader configures the WebSocket connection upgrade.
 var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool { return true },
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
 }
 
 // A simple hub to manage connected clients.

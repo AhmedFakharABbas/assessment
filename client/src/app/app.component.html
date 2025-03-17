@@ -1,12 +1,25 @@
 <nav class="bg-gray-900 text-white p-4 flex justify-between items-center">
-  <div>
+  <div class="flex gap-6">
     <a (click)="navigateTo('/blog')" class="mr-4 cursor-pointer">Blog</a>
     <a (click)="navigateTo('/map')" class="cursor-pointer">Map</a>
-    <a (click)="navigateTo('/board')" class="cursor-pointer ml-4">Board</a>
+    <a (click)="navigateTo('/board')" class="cursor-pointer">Board</a>
+    <a (click)="navigateTo('/task-navigator')" class="cursor-pointer">Task Navigator </a>
   </div>
-  <button (click)="toggleTheme()" class="bg-gray-700 px-3 py-2 rounded">
-    {{ isDarkMode ? "🌙 Dark" : "☀️ Light" }}
-  </button>
+  <!-- Right: Theme Toggle & Logout -->
+  <div class="flex items-center gap-4">
+    <button
+      (click)="toggleTheme()"
+      class="bg-gray-700 px-4 py-2 rounded hover:bg-gray-600 transition"
+    >
+      {{ isDarkMode ? "🌙 Dark" : "☀️ Light" }}
+    </button>
+    <button
+      (click)="logout()"
+      class="bg-gray-600 px-4 py-2 rounded hover:bg-gray-500 transition"
+    >
+      🔒 Logout
+    </button>
+  </div>
 </nav>
 
 @if (errorMessage) {

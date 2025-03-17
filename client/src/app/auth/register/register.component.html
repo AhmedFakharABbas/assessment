@@ -6,13 +6,13 @@
         <label class="block text-gray-700">Full Name</label>
         <input
           type="text"
-          formControlName="name"
+          formControlName="username"
           class="w-full p-2 border rounded"
         />
         <p
           *ngIf="
-            registerForm.controls['name'].invalid &&
-            registerForm.controls['name'].touched
+            registerForm.controls['username'].invalid &&
+            registerForm.controls['username'].touched
           "
           class="text-red-500"
         >
@@ -34,6 +34,23 @@
           class="text-red-500"
         >
           Invalid email format
+        </p>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700">Role</label>
+        <input
+          type="role"
+          formControlName="role"
+          class="w-full p-2 border rounded"
+        />
+        <p
+          *ngIf="
+            registerForm.controls['role'].invalid &&
+            registerForm.controls['role'].touched
+          "
+          class="text-red-500"
+        >
+          Role must be Admin, Manager, or Member.
         </p>
       </div>
       <div class="mb-4">

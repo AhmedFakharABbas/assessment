@@ -39,7 +39,7 @@ func JWTAuth() gin.HandlerFunc {
 		}
 
 		// Save user data (e.g., username and role) in context for later use
-		c.Set("username", claims["username"])
+		c.Set("email", claims["email"])
 		c.Set("role", claims["role"])
 		c.Next()
 	}

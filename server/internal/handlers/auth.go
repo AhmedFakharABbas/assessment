@@ -1,6 +1,5 @@
 package handlers
 import (
-	"fmt"
 	"strings"
 	"net/http"
 	"time"
@@ -10,6 +9,7 @@ import (
 
 	"task-manager-backend/internal/db"
 	"task-manager-backend/internal/models"
+	
 )
 
 // Define a secret key (in production, use env vars or a secure vault)
@@ -30,7 +30,7 @@ func Register(c *gin.Context) {
 	}
 	user.Password = string(hashedPassword)
 	// Insert user into database
-	_, err = db.DB.NamedExec(`INSERT INTO users (username, password, role) VALUES (:username, :password, :role)`, &user)
+	_, err = db.DB.NamedExec(`INSERT INTO users (username,email, password, role) VALUES (:username,:email, :password, :role)`, &user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error saving user"})
 		return
@@ -41,28 +41,21 @@ func Register(c *gin.Context) {
 // Login handler
 func Login(c *gin.Context) {
 	var req struct {
-		Username string `json:"username"`
+		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	fmt.Println("Received username:", req.Username)
-	fmt.Println("Received password:", req.Password)
-	req.Username = strings.TrimSpace(req.Username)
 
-
-
-	// fmt.Printf("Executing query: 
+	req.Email = strings.TrimSpace(req.Email)
 
 	var user models.User
 
-	// err := db.DB.Get(&user, "SELECT * FROM users WHERE username=$1", req.Username)
-	err := db.DB.Get(&user, "SELECT * FROM users WHERE LOWER(username) = LOWER($1)", req.Username)
+	// Fetch user by email (case-insensitive search)
+	err := db.DB.Get(&user, "SELECT * FROM users WHERE LOWER(email) = LOWER($1)", req.Email)
 	if err != nil {
-		fmt.Println("err:", err)
-
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
 		return
 	}
@@ -73,9 +66,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// Create JWT token with user role
+
+	// Create JWT token with user details
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"username": user.Username,
+		"email":    user.Email,
 		"role":     user.Role,
 		"exp":      time.Now().Add(time.Hour * 72).Unix(),
 	})
@@ -85,5 +80,7 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{"token": tokenString})
 }
+

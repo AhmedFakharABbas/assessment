@@ -1,0 +1,44 @@
+<div class="flex min-h-screen items-center justify-center bg-gray-100">
+    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+      <h2 class="text-xl font-bold text-center mb-6">Create Task</h2>
+      <form [formGroup]="taskForm" (ngSubmit)="createTask()">
+        
+        <div class="mb-4">
+          <label class="block text-gray-700">Task Name</label>
+          <input type="text" formControlName="name" class="w-full p-2 border rounded" required />
+        </div>
+  
+        <div class="mb-4">
+          <label class="block text-gray-700">Description</label>
+          <textarea formControlName="description" class="w-full p-2 border rounded"></textarea>
+        </div>
+  
+        <div class="mb-4">
+          <label class="block text-gray-700">Status</label>
+          <select formControlName="status" class="w-full p-2 border rounded">
+            <option value="To Do">To Do</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Done">Done</option>
+          </select>
+        </div>
+  
+        <div class="mb-4">
+          <label class="block text-gray-700">Latitude</label>
+          <input type="number" formControlName="latitude" class="w-full p-2 border rounded" required />
+        </div>
+  
+        <div class="mb-4">
+          <label class="block text-gray-700">Longitude</label>
+          <input type="number" formControlName="longitude" class="w-full p-2 border rounded" required />
+        </div>
+  
+        <button 
+          type="submit" 
+          class="w-full bg-blue-500 text-white px-4 py-2 rounded mt-4"
+          [disabled]="taskForm.invalid || isLoading">
+          {{ isLoading ? 'Creating...' : 'Create Task' }}
+        </button>
+      </form>
+    </div>
+  </div>
+  

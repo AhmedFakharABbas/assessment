@@ -7,12 +7,23 @@ import (
 	"task-manager-backend/internal/db"
 	"task-manager-backend/internal/handlers"
 	"task-manager-backend/internal/middleware"
+	"github.com/gin-contrib/cors"
 )
+
 func main() {
 	 connStr := "postgres://postgres:hawk@localhost:5432/tasksdb?sslmode=disable"
 
 	 db.InitDB(connStr)
 	 r := gin.Default()
+
+	 // Enable CORS for frontend (localhost:4200)
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:4200"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+		AllowWebSockets:  true,
+	}))
 
 	 // Public routes
 	 public := r.Group("/")

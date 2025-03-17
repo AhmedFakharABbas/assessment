@@ -1,50 +1,62 @@
+<div class="flex justify-end mb-4">
+  <button
+    class="bg-blue-500 text-white px-4 p-2 rounded mt-1 mx-2"
+    routerLink="/create-task"
+  >
+    + Create Task
+  </button>
+</div>
 <div class="board-container">
-    <!-- Todo Column -->
-    <div class="task-column">
-      <h3 class="task-header">To Do</h3>
-      <div 
-        cdkDropList
-        #todoList="cdkDropList"
-        [cdkDropListData]="todo"
-        [cdkDropListConnectedTo]="[inProgressList, doneList]"
-        (cdkDropListDropped)="drop($event)"
-        class="task-list">
-        <div *ngFor="let task of todo" cdkDrag class="task-item">
-          {{ task }}
-        </div>
-      </div>
-    </div>
-  
-    <!-- In Progress Column -->
-    <div class="task-column">
-      <h3 class="task-header">In Progress</h3>
-      <div 
-        cdkDropList
-        #inProgressList="cdkDropList"
-        [cdkDropListData]="inProgress"
-        [cdkDropListConnectedTo]="[todoList, doneList]"
-        (cdkDropListDropped)="drop($event)"
-        class="task-list">
-        <div *ngFor="let task of inProgress" cdkDrag class="task-item">
-          {{ task }}
-        </div>
-      </div>
-    </div>
-  
-    <!-- Done Column -->
-    <div class="task-column">
-      <h3 class="task-header">Done</h3>
-      <div 
-        cdkDropList
-        #doneList="cdkDropList"
-        [cdkDropListData]="done"
-        [cdkDropListConnectedTo]="[todoList, inProgressList]"
-        (cdkDropListDropped)="drop($event)"
-        class="task-list">
-        <div *ngFor="let task of done" cdkDrag class="task-item">
-          {{ task }}
-        </div>
+  <!-- Add Task Button -->
+
+  <!-- Todo Column -->
+  <div class="task-column">
+    <h3 class="task-header">To Do</h3>
+    <div
+      cdkDropList
+      #todoList="cdkDropList"
+      [cdkDropListData]="todo"
+      [cdkDropListConnectedTo]="[inProgressList, doneList]"
+      (cdkDropListDropped)="drop($event)"
+      class="task-list"
+    >
+      <div *ngFor="let task of todo" cdkDrag class="task-item">
+        {{ task.name }}
       </div>
     </div>
   </div>
-  
+
+  <!-- In Progress Column -->
+  <div class="task-column">
+    <h3 class="task-header">In Progress</h3>
+    <div
+      cdkDropList
+      #inProgressList="cdkDropList"
+      [cdkDropListData]="inProgress"
+      [cdkDropListConnectedTo]="[todoList, doneList]"
+      (cdkDropListDropped)="drop($event)"
+      class="task-list"
+    >
+      <div *ngFor="let task of inProgress" cdkDrag class="task-item">
+        {{ task.name }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Done Column -->
+  <div class="task-column">
+    <h3 class="task-header">Done</h3>
+    <div
+      cdkDropList
+      #doneList="cdkDropList"
+      [cdkDropListData]="done"
+      [cdkDropListConnectedTo]="[todoList, inProgressList]"
+      (cdkDropListDropped)="drop($event)"
+      class="task-list"
+    >
+      <div *ngFor="let task of done" cdkDrag class="task-item">
+        {{ task.name }}
+      </div>
+    </div>
+  </div>
+</div>
