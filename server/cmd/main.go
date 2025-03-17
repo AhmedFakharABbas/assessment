@@ -11,7 +11,6 @@ import (
 func main() {
 	 connStr := "postgres://postgres:hawk@localhost:5432/tasksdb?sslmode=disable"
 
-	// port := "9070" // Port to listen on
 	 db.InitDB(connStr)
 	 r := gin.Default()
 

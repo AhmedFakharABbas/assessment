@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { BoardComponent } from './board/board.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   
@@ -18,6 +19,7 @@ export const routes: Routes = [
   },
   {
     path: 'board',
+    canActivate: [AuthGuard],
     component:BoardComponent
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },

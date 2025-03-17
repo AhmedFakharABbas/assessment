@@ -139,6 +139,8 @@ dist
 /client/node_modules/
 /client/dist/
 .client/
+/client/.angular/
+/client/.angular/cache
 
 # Go
 /server/bin/
