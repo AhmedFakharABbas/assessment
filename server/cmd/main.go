@@ -30,6 +30,8 @@ func main() {
 	 {
 		 public.POST("/register", handlers.Register)
 		 public.POST("/login", handlers.Login)
+		 public.GET("/ws", handlers.WebSocketHandler)
+
 	 }
  
 	 // Protected routes
@@ -46,7 +48,6 @@ func main() {
 		 protected.GET("/tasks/nearby", handlers.GetTasksNearby)
  
 		 // WebSocket endpoint (could also be public if needed)
-		 protected.GET("/ws", handlers.WebSocketHandler)
 	 }
  
 	 // Start server

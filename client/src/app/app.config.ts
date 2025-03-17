@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ErrorInterceptor } from '../interceptors/error.interceptor';
+import { AuthInterceptor } from '../interceptors/auth-interceptor.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [

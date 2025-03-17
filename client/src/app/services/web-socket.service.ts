@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { webSocket, WebSocketSubject } from "rxjs/webSocket";
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { AuthService } from "./auth.service";
 
 @Injectable({
@@ -7,15 +7,10 @@ import { AuthService } from "./auth.service";
 })
 export class WebSocketService {
   private socket$: WebSocketSubject<any>;
-  private authService = inject(AuthService);
-
-  private token = this.authService.getToken();
-  wsUrl = this.token
-    ? `ws://localhost:9070/ws?token=${this.token}`
-    : `ws://localhost:9070/ws`;
+  private  authService=inject(AuthService);
 
   constructor() {
-    this.socket$ = webSocket(this.wsUrl);
+    this.socket$ = webSocket("ws://localhost:9070/ws");
   }
 
   get messages() {
