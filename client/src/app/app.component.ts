@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
   title = "advanced-blog-map-assessment";
   errorMessage: string = "";
 
+  
   constructor(private themeService: ThemeService, private router: Router) {}
 
   get isDarkMode() {
